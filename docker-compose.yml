@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: decisiontrace-db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: decisiontrace
+
+  backend:
+    build: ./server
+    container_name: decisiontrace-backend
+    ports:
+      - "5000:5000"
+    environment:
+      MONGODB_URI: mongodb://mongodb:27017/decisiontrace
+      JWT_SECRET: your_super_secret_jwt_key_change_this
+      NODE_ENV: development
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+    depends_on:
+      - mongodb
+    volumes:
+      - ./server/src:/app/src
+
+  frontend:
+    build: .
+    container_name: decisiontrace-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_URL: http://localhost:5000/api
+    depends_on:
+      - backend
+    volumes:
+      - ./:/app
+      - /app/node_modules
+
+volumes:
+  mongo_data:

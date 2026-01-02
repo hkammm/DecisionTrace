@@ -1,0 +1,5 @@
+{
+  "name": "DecisionTrace",
+  "description": "A decision journal and analysis platform that helps users track reasoning, assumptions, and outcomes to improve future decision-making through AI-assisted pattern detection.",
+  "requestFramePermissions": []
+}
